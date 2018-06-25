@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Search GIF</title>
+</head>
+<style>
+input[type=text] {
+    width: 130px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('searchicon.png');
+    background-position: 10px 10px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+    width: 100%;
+}
+</style>
+<body>
+    <h2 align ="center" style = "color:Tomato;font-family : verdana">GIF SEARCH<h2>
+	<div align ="center" style = "margin:100px 100px">
+      <input id="Input" type="text" name="search" placeholder="Search..">
+      <div style = "margin:100px 100px">
+      <span id = "img1"></span>
+      <span id = "nothing"></span>
+      </div>
+	</div>
+</body>
+<script>
+var input = document.getElementById("Input");
+input.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+        var x=document.getElementById("Input").value;        
+        request = new XMLHttpRequest;
+	request.open('GET', 'http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag='+x, true);
+	request.onload = function() {    
+		if (request.status >= 200 && request.status < 400){         
+			images = JSON.parse(request.responseText).data.image_url;	
+            if(images === undefined){           
+                document.getElementById("img1").innerHTML = ""
+                document.getElementById("nothing").innerHTML ="NO GIFS"
+
+            }else{
+                document.getElementById("nothing").innerHTML =""
+			    document.getElementById("img1").innerHTML = '<center><img src = "'+images+'"></center>';
+            }
+		}
+	};
+
+	request.onerror = function() {
+        alert("error")
+		
+	};
+
+	request.send();
+    }
+});
+</script>
+
+</html>
